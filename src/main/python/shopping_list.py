@@ -28,7 +28,7 @@ def handle_user_input(choice, shopping_list):
         '1': lambda: show_list(shopping_list, 'Y'),
         '2': lambda: add_item(shopping_list),
         '3': lambda: delete_item(shopping_list),
-        '4': lambda: edit_item(),
+        '4': lambda: edit_item(shopping_list),
         '5': lambda: quit_()
     }
 
@@ -55,7 +55,9 @@ def add_item(shopping_list):
     Item = collections.namedtuple('Item', 'name quantity')
     new_item = Item(name=name, quantity=quantity)
     shopping_list.append(new_item)
+    print()
     print('{} added to shopping list.'.format(new_item.name))
+    show_list(shopping_list, 'N')
     print()
     show_press_enter_message()
 
@@ -66,13 +68,30 @@ def delete_item(shopping_list):
     item_name_to_remove = input('Item to remove: ')
     item_to_remove = [item for item in shopping_list if item.name == item_name_to_remove][0]
     shopping_list.remove(item_to_remove)
+    print()
     print('{} removed from the shopping list.'.format(item_name_to_remove))
+    show_list(shopping_list, 'N')
     print()
     show_press_enter_message()
 
 
-def edit_item():
-    pass
+def edit_item(shopping_list):
+    show_list(shopping_list, 'N')
+    print()
+    item_name_to_edit = input('Item to edit: ')
+    item_to_edit = [item for item in shopping_list if item.name == item_name_to_edit][0]
+    new_name = input('Enter new name or press enter to keep the same name: ')
+    new_name = item_to_edit.name if (len(new_name) == 0) else new_name
+    new_quantity = input('Enter new quantity or press enter to keep the same quantity: ')
+    new_quantity = item_to_edit.quantity if (len(new_quantity) == 0) else new_quantity
+    index = shopping_list.index(item_to_edit)
+    Item = collections.namedtuple('Item', 'name quantity')
+    shopping_list[index] = Item(name=new_name, quantity=new_quantity)
+    print()
+    print('Shopping list updated.')
+    show_list(shopping_list, 'N')
+    print()
+    show_press_enter_message()
 
 
 def quit_():

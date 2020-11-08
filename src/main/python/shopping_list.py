@@ -66,10 +66,13 @@ def delete_item(shopping_list):
     show_list(shopping_list, 'N')
     print()
     item_name_to_remove = input('Item to remove: ')
-    item_to_remove = [item for item in shopping_list if item.name == item_name_to_remove][0]
-    shopping_list.remove(item_to_remove)
-    print()
-    print('{} removed from the shopping list.'.format(item_name_to_remove))
+    try:
+        item_to_remove = [item for item in shopping_list if item.name == item_name_to_remove][0]
+    except IndexError as ie:
+        print("Item {} doesn't exist in the list.".format(item_name_to_remove))
+    else:
+        shopping_list.remove(item_to_remove)
+        print('{} removed from the shopping list.'.format(item_name_to_remove))
     show_list(shopping_list, 'N')
     print()
     show_press_enter_message()
@@ -79,22 +82,27 @@ def edit_item(shopping_list):
     show_list(shopping_list, 'N')
     print()
     item_name_to_edit = input('Item to edit: ')
-    item_to_edit = [item for item in shopping_list if item.name == item_name_to_edit][0]
-    new_name = input('Enter new name or press enter to keep the same name: ')
-    new_name = item_to_edit.name if (len(new_name) == 0) else new_name
-    new_quantity = input('Enter new quantity or press enter to keep the same quantity: ')
-    new_quantity = item_to_edit.quantity if (len(new_quantity) == 0) else new_quantity
-    index = shopping_list.index(item_to_edit)
-    Item = collections.namedtuple('Item', 'name quantity')
-    shopping_list[index] = Item(name=new_name, quantity=new_quantity)
-    print()
-    print('Shopping list updated.')
+    try:
+        item_to_edit = [item for item in shopping_list if item.name == item_name_to_edit][0]
+    except IndexError as ie:
+        print("Item {} doesn't exist in the list.".format(item_name_to_edit))
+    else:
+        new_name = input('Enter new name or press enter to keep the same name: ')
+        new_name = item_to_edit.name if (len(new_name) == 0) else new_name
+        new_quantity = input('Enter new quantity or press enter to keep the same quantity: ')
+        new_quantity = item_to_edit.quantity if (len(new_quantity) == 0) else new_quantity
+        index = shopping_list.index(item_to_edit)
+        Item = collections.namedtuple('Item', 'name quantity')
+        shopping_list[index] = Item(name=new_name, quantity=new_quantity)
+        print()
+        print('Shopping list updated.')
     show_list(shopping_list, 'N')
     print()
     show_press_enter_message()
 
 
 def quit_():
+    save_shopping_list()
     print('Bye bye!!!')
     sys.exit()
 
@@ -110,6 +118,10 @@ def load_shopping_list():
     oranges = Item(name='oranges', quantity=2)
     shopping_list = [apples, bananas, oranges]
     return shopping_list
+
+
+def save_shopping_list():
+    pass
 
 
 def return_white_spaces(length, string):

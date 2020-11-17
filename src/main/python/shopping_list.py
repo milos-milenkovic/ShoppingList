@@ -1,5 +1,8 @@
 import collections
+import os
 import sys
+import json
+from pathlib import Path
 
 
 def main():
@@ -29,7 +32,7 @@ def handle_user_input(choice, shopping_list):
         '2': lambda: add_item(shopping_list),
         '3': lambda: delete_item(shopping_list),
         '4': lambda: edit_item(shopping_list),
-        '5': lambda: quit_()
+        '5': lambda: quit_(shopping_list)
     }
 
     return switcher_.get(choice, lambda: "Invalid choice, please enter a number between 1 and 5!")()
@@ -101,8 +104,8 @@ def edit_item(shopping_list):
     show_press_enter_message()
 
 
-def quit_():
-    save_shopping_list()
+def quit_(shopping_list):
+    save_shopping_list_as_json(shopping_list)
     print('Bye bye!!!')
     sys.exit()
 
@@ -112,16 +115,22 @@ def show_press_enter_message():
 
 
 def load_shopping_list():
+    root_dir = Path(__file__).parent.parent.parent.parent
+    file_path = os.path.join(root_dir, 'shopping_list.json')
+    with open(file_path) as jsonfile:
+        data = json.load(jsonfile)
     Item = collections.namedtuple('Item', 'name quantity')
-    apples = Item(name='apples', quantity=5)
-    bananas = Item(name='bananas', quantity=3)
-    oranges = Item(name='oranges', quantity=2)
-    shopping_list = [apples, bananas, oranges]
+    shopping_list = []
+    for item in data:
+        shopping_list.append(Item(name=item[0], quantity=item[1]))
     return shopping_list
 
 
-def save_shopping_list():
-    pass
+def save_shopping_list_as_json(shopping_list):
+    root_dir = Path(__file__).parent.parent.parent.parent
+    file_path = os.path.join(root_dir, 'shopping_list.json')
+    with open(file_path, 'w') as jsonfile:
+        json.dump(shopping_list, jsonfile)
 
 
 def return_white_spaces(length, string):

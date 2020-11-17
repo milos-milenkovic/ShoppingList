@@ -128,6 +128,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-#IntelliJ
+# IntelliJ
 *.iml
 .idea
+
+# local files
+shopping_list.json

@@ -120,9 +120,7 @@ def load_shopping_list():
     with open(file_path) as jsonfile:
         data = json.load(jsonfile)
     Item = collections.namedtuple('Item', 'name quantity')
-    shopping_list = []
-    for item in data:
-        shopping_list.append(Item(name=item[0], quantity=item[1]))
+    shopping_list = [Item(name=item[0], quantity=item[1]) for item in data]
     return shopping_list
 
 
